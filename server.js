@@ -268,24 +268,24 @@ router.delete('/movies/:title', authJwtController.isAuthenticated, (req, res) =>
         })
         .catch(error => res.status(500).json({ error: 'An error occurred while deleting the movie' }));
 });
-//ADDED SEARCH MOVIES
-router.post('/search', authJwtController, (req, res) => {
-    const { query } = req.body;
+// //ADDED SEARCH MOVIES
+// router.post('/search', authJwtController, (req, res) => {
+//     const { query } = req.body;
 
-    Movie.find({
-        $or: [
-            { title: { $regex: query, $options: 'i' } },
-            { actors: { $regex: query, $options: 'i' } }
-        ]
-    }).exec((err, movies) => {
-        if (err) {
-            console.error('Error searching movies:', err);
-            res.status(500).json({ error: 'An error occurred while searching movies' });
-        } else {
-            res.status(200).json(movies);
-        }
-    });
-});
+//     Movie.find({
+//         $or: [
+//             { title: { $regex: query, $options: 'i' } },
+//             { actors: { $regex: query, $options: 'i' } }
+//         ]
+//     }).exec((err, movies) => {
+//         if (err) {
+//             console.error('Error searching movies:', err);
+//             res.status(500).json({ error: 'An error occurred while searching movies' });
+//         } else {
+//             res.status(200).json(movies);
+//         }
+//     });
+// });
 
 //REVIEW ROUTES
 //post route to add a review
