@@ -269,7 +269,7 @@ router.delete('/movies/:title', authJwtController.isAuthenticated, (req, res) =>
         .catch(error => res.status(500).json({ error: 'An error occurred while deleting the movie' }));
 });
 //ADDED SEARCH MOVIES
-router.post('/search', authenticateJWT, (req, res) => {
+router.post('/search', authJwtController, (req, res) => {
     const { query } = req.body;
 
     Movie.find({
