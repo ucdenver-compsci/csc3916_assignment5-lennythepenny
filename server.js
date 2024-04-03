@@ -182,16 +182,69 @@ router.post('/movies', authJwtController.isAuthenticated, (req, res) => {
         });
 });
 
-//get /movies with specific id route and create array for reviews
+// //get /movies with specific id route and create array for reviews
+// router.get('/movies/:id', authJwtController.isAuthenticated, (req, res) => {
+//     const movieId = req.params.id;
+
+//     //checking if query in URL has ?reviews=true
+//     const includeReviews = req.query.reviews === 'true';
+
+//     //reviews are requested
+//     if (includeReviews) {
+//         //MongoDB aggregation to create movie + it's reviews array
+//         Movie.aggregate([
+//             { $match: { _id: mongoose.Types.ObjectId(movieId) } },
+//             {
+//                 $lookup: {
+//                     from: "reviews",
+//                     localField: "_id",
+//                     foreignField: "movieId",
+//                     as: "movie_reviews"
+//                 }
+//             },
+//             {
+//                 $group: {
+//                     _id: '$_id',
+//                     title: { $first: '$title' },
+//                     image: { $first: '$image' },
+//                     actors: { $first: '$actors' },
+//                     releaseDate: { $first: '$releaseDate' },
+//                     genre: { $first: '$genre' },
+//                     averageRating: { $avg: '$movie_reviews.rating' },
+//                     reviews: { $push: '$movie_reviews' }
+//                 }
+//             }
+//         ]).exec(function (err, result) {
+//             if (err) {
+//                 return res.status(404).json({ error: 'Movie not found' });
+//             } else {
+//                 res.status(200).json(result);
+//             }
+//         });
+//     } else {
+//         Movie.findById(movieId)
+//             .then(movie => {
+//                 if (!movie) {
+//                     return res.status(404).json({ error: 'Movie not found' });
+//                 }
+//                 res.status(200).json(movie);
+//             })
+//             .catch(error => {
+//                 console.error('Error fetching movie:', error);
+//                 res.status(404).json({ error: 'Movie not found' });
+//             });
+//     }
+// });
+
 router.get('/movies/:id', authJwtController.isAuthenticated, (req, res) => {
     const movieId = req.params.id;
 
-    //checking if query in URL has ?reviews=true
+    // Checking if query in URL has ?reviews=true
     const includeReviews = req.query.reviews === 'true';
 
-    //reviews are requested
+    // Reviews are requested
     if (includeReviews) {
-        //MongoDB aggregation to create movie + it's reviews array
+        // MongoDB aggregation to create movie + its reviews array
         Movie.aggregate([
             { $match: { _id: mongoose.Types.ObjectId(movieId) } },
             {
@@ -203,29 +256,35 @@ router.get('/movies/:id', authJwtController.isAuthenticated, (req, res) => {
                 }
             },
             {
-                $group: {
-                    _id: '$_id',
-                    title: { $first: '$title' },
-                    image: { $first: '$image' },
-                    actors: { $first: '$actors' },
-                    releaseDate: { $first: '$releaseDate' },
-                    genre: { $first: '$genre' },
-                    averageRating: { $avg: '$movie_reviews.rating' },
-                    reviews: { $push: '$movie_reviews' }
+                $addFields: {
+                    avgRating: { $avg: '$movie_reviews.rating' }
                 }
             }
         ]).exec(function (err, result) {
             if (err) {
                 return res.status(404).json({ error: 'Movie not found' });
             } else {
-                res.status(200).json(result);
+                // Check if result exists
+                if (!result.length) {
+                    return res.status(404).json({ error: 'Movie not found' });
+                }
+                // Check if title exists in the result
+                if (!result[0].title) {
+                    return res.status(404).json({ error: 'Movie title not found' });
+                }
+                res.status(200).json(result[0]);
             }
         });
     } else {
+        // Find the movie by its ID
         Movie.findById(movieId)
             .then(movie => {
                 if (!movie) {
                     return res.status(404).json({ error: 'Movie not found' });
+                }
+                // Check if title exists in the movie
+                if (!movie.title) {
+                    return res.status(404).json({ error: 'Movie title not found' });
                 }
                 res.status(200).json(movie);
             })
@@ -235,6 +294,7 @@ router.get('/movies/:id', authJwtController.isAuthenticated, (req, res) => {
             });
     }
 });
+
 
 //put /movies/:title route
 router.put('/movies/:title', authJwtController.isAuthenticated, (req, res) => {
