@@ -1,6 +1,6 @@
 [{
   "title": "Jujutsu Kaisen 0",
-    "releaseDate": "2021-01-01T00:00:00.000Z",
+    "releaseDate": "March 18, 2022",
     "genre": "Action",
     "actors": [
       {
@@ -20,7 +20,7 @@
   },
   {
     "title": "Kill Bill: Vol. 1",
-    "releaseDate": "2003-01-01T00:00:00.000Z",
+    "releaseDate": "October 10, 2003",
     "genre": "Action",
     "actors": [
       {
@@ -40,7 +40,7 @@
   },
   {
     "title": "John Wick",
-    "releaseDate": "2014-01-01T00:00:00.000Z",
+    "releaseDate": "October 24, 2014",
     "genre": "Action, Thriller",
     "actors": [
       {
@@ -60,7 +60,7 @@
   },
   {
     "title": "The Menu",
-    "releaseDate": "2022-01-01T00:00:00.000Z",
+    "releaseDate": "November 18, 2022",
     "genre": "Thriller",
     "actors": [
       {
@@ -80,7 +80,7 @@
   },
   {
     "title": "Shutter Island",
-    "releaseDate": "2022-01-01T00:00:00.000Z",
+    "releaseDate": "February 19, 2010",
     "genre": "Mystery",
     "actors": [
       {
@@ -100,7 +100,7 @@
   },
   {
     "title": "Pirates of the Caribbean: On Stranger Tides",
-    "releaseDate": "2011-01-01T00:00:00.000Z",
+    "releaseDate": "May 7, 2011",
     "genre": "Adventure",
     "actors": [
       {
@@ -120,7 +120,7 @@
   },
   {
     "title": "Star Wars: Episode III - Revenge of the Sith",
-    "releaseDate": "2005-01-01T00:00:00.000Z",
+    "releaseDate": "May 19, 2005",
     "genre": "Science Fiction, Fantasy",
     "actors": [
       {
@@ -140,7 +140,7 @@
   },
   {
     "title": "Bill and Ted's Excellent Adventure",
-    "releaseDate": "1989-01-01T00:00:00.000Z",
+    "releaseDate": "February 17,1989",
     "genre": "Comedy, Science Fiction",
     "actors": [
       {
@@ -160,7 +160,7 @@
   },
   {
     "title": "Wayne's World",
-    "releaseDate": "1992-01-01T00:00:00.000Z",
+    "releaseDate": "February 14,1992",
     "genre": "Comedy",
     "actors": [
       {
@@ -180,7 +180,7 @@
   },
   {
     "title": "Midsommar",
-    "releaseDate": "2019-01-01T00:00:00.000Z",
+    "releaseDate": "July 3,2019",
     "genre": "Horror",
     "actors": [
       {
@@ -200,7 +200,7 @@
   },
   {
       "title": "Alice in Wonderland",
-      "releaseDate": "2010-01-01T00:00:00.000Z",
+      "releaseDate": "March 5, 2010",
       "genre": "Fantasy",
       "actors": [
         {
