@@ -249,13 +249,13 @@ router.get('/movies/:id', authJwtController.isAuthenticated, (req, res) => {
 
 //post /movies route
 router.post('/movies', authJwtController.isAuthenticated, (req, res) => {
-    const {movieId, title, releaseDate, genre, actors } = req.body;
+    const {movieId, title, releaseDate, genre, actors, imageUrl} = req.body;
     //check if title in the request body
     if (!title) {
         return res.status(400).json({ error: 'Title is required' });
     }
     //create new Movie object and save it to the database
-    const newMovie = new Movie({ movieId, title, releaseDate, genre, actors });
+    const newMovie = new Movie({ movieId, title, releaseDate, genre, actors, imageUrl});
 
     newMovie.save()
         .then(savedMovie => {
