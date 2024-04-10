@@ -128,17 +128,33 @@ router.post('/signin', function (req, res) {
 });
 
 //MOVIE ROUTES
-//get /movies route
 // router.get('/movies', authJwtController.isAuthenticated, (req, res) => {
-//     //find all the movies in the database
-//     Movie.find({ title: { $exists: true } })
-//         .then(movies => {
-//             res.status(200).json(movies);
-//         })
-//         .catch(error => {
-//             console.error('Error finding movies:', error);
+//     Movie.aggregate([
+//         {
+//             $lookup: {
+//                 from: "reviews",
+//                 localField: "_id",
+//                 foreignField: "movieId",
+//                 as: "movie_reviews"
+//             }
+//         },
+//         {
+//             $addFields: {
+//                 avgRating: { $avg: "$movie_reviews.rating" },
+//                 imageUrl: "$imageUrl" // Include the imageUrl field from the original movie document
+//             }
+//         },
+//         {
+//             $sort: { avgRating: -1 } 
+//         }
+//     ]).exec((err, movies) => {
+//         if (err) {
+//             console.error('Error finding movies:', err);
 //             res.status(500).json({ error: 'An error occurred while fetching movies' });
-//         });
+//         } else {
+//             res.status(200).json(movies);
+//         }
+//     });
 // });
 router.get('/movies', authJwtController.isAuthenticated, (req, res) => {
     Movie.aggregate([
@@ -168,43 +184,6 @@ router.get('/movies', authJwtController.isAuthenticated, (req, res) => {
         }
     });
 });
-
-// router.get('/movies', authJwtController.isAuthenticated, (req, res) => {
-//     Movie.aggregate([
-//         {
-//             $lookup: {
-//                 from: "reviews",
-//                 localField: "_id",
-//                 foreignField: "movieId",
-//                 as: "movie_reviews"
-//             }
-//         },
-//         {
-//             $addFields: {
-//                 avgRating: { $avg: "$movie_reviews.rating" }
-//             }
-//         },
-//         {
-//             $sort: { avgRating: -1 } 
-//         }
-//     ]).exec((err, movies) => {
-//         if (err) {
-//             console.error('Error finding movies:', error);
-//             res.status(500).json({ error: 'An error occurred while fetching movies' });
-//         } else {
-//             //ADDED THIS
-//             const moviesWithImageURLs = movies.map(movie => ({
-//                 _id: movie._id,
-//                 title: movie.title,
-//                 releaseDate: movie.releaseDate,
-//                 genre: movie.genre,
-//                 actors: movie.actors,
-//                 imageUrl: movie.imageUrl 
-//             }));
-//             res.status(200).json(moviesWithImageURLs);
-//         }
-//     });
-// });
 
 //get /movies with specific id route and create array for reviews
 router.get('/movies/:id', authJwtController.isAuthenticated, (req, res) => {
