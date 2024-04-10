@@ -291,10 +291,10 @@ router.post('/movies', authJwtController.isAuthenticated, (req, res) => {
             //send the newly saved movie with success response
             res.status(200).json(savedMovie);
         })
-        .catch(error => {
-            console.error('Error saving movie to database:', error); // Log error if saving to database fails
-            res.status(500).json({ error: 'Internal server error' });
-        });
+        // .catch(error => {
+        //     console.error('Error saving movie to database:', error); // Log error if saving to database fails
+        //     res.status(500).json({ error: 'Internal server error' });
+        // });
 });
 
 //put /movies/:title route
