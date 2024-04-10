@@ -271,7 +271,7 @@ router.get('/movies/:id', authJwtController.isAuthenticated, (req, res) => {
 //         });
 // });
 router.post('/movies', authJwtController.isAuthenticated, (req, res) => {
-    console.log('Received POST request to /movies:', req.body); // Log the received request body
+
     
     const {title, releaseDate, genre, actors, imageUrl } = req.body;
     console.log('Parsed request body:', {title, releaseDate, genre, actors, imageUrl }); // Log the parsed request body
@@ -283,7 +283,7 @@ router.post('/movies', authJwtController.isAuthenticated, (req, res) => {
     }
     
     //create new Movie object and save it to the database
-    const newMovie = new Movie({title, releaseDate, genre, actors, imageUrl });
+    const newMovie = new Movie({title, releaseDate, genre, actors, imageUrl});
     
     newMovie.save()
         .then(savedMovie => {
