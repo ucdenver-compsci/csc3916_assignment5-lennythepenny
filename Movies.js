@@ -5,7 +5,6 @@ const MovieSchema = new mongoose.Schema({
   title: { type: String, required: true, index: true },
     // releaseDate: Date,
     releaseDate: { type: Number, min: [1900, 'Must be greater than 1899'], max: [2100, 'Must be less than 2100']},
-    // imageUrl: { type: String }, 
     genre: {
       type: String,
       enum: [
