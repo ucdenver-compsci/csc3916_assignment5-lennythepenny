@@ -254,48 +254,44 @@ router.get('/movies/:id', authJwtController.isAuthenticated, (req, res) => {
     }
 });
 
-// //post /movies route
-// router.post('/movies', authJwtController.isAuthenticated, (req, res) => {
-//     const {movieId, title, releaseDate, genre, actors, imageUrl} = req.body;
-//     //check if title in the request body
-//     if (!title) {
-//         return res.status(400).json({ error: 'Title is required' });
-//     }
-//     //create new Movie object and save it to the database
-//     const newMovie = new Movie({ movieId, title, releaseDate, genre, actors, imageUrl});
-
-//     newMovie.save()
-//         .then(savedMovie => {
-//             //send the newly saved movie with success response
-//             res.status(200).json(savedMovie);
-//         });
-// });
+//post /movies route
 router.post('/movies', authJwtController.isAuthenticated, (req, res) => {
-    console.log('Received POST request to /movies:', req.body); // Log the received request body
-    
-    const {title, releaseDate, genre, actors, imageUrl } = req.body;
-    console.log('Parsed request body:', {title, releaseDate, genre, actors, imageUrl }); // Log the parsed request body
-    
+    const {movieId, title, releaseDate, genre, actors, imageUrl} = req.body;
     //check if title in the request body
     if (!title) {
-        console.error('Title is required:', req.body); // Log error if title is missing
         return res.status(400).json({ error: 'Title is required' });
     }
-    
     //create new Movie object and save it to the database
-    const newMovie = new Movie({title, releaseDate, genre, actors, imageUrl });
-    
+    const newMovie = new Movie({ movieId, title, releaseDate, genre, actors, imageUrl});
+
     newMovie.save()
         .then(savedMovie => {
-            console.log('Saved movie to database:', savedMovie); // Log the saved movie
             //send the newly saved movie with success response
             res.status(200).json(savedMovie);
-        })
-        // .catch(error => {
-        //     console.error('Error saving movie to database:', error); // Log error if saving to database fails
-        //     res.status(500).json({ error: 'Internal server error' });
-        // });
+        });
 });
+// router.post('/movies', authJwtController.isAuthenticated, (req, res) => {
+//     console.log('Received POST request to /movies:', req.body); // Log the received request body
+    
+//     const {title, releaseDate, genre, actors, imageUrl } = req.body;
+//     console.log('Parsed request body:', {title, releaseDate, genre, actors, imageUrl }); // Log the parsed request body
+    
+//     //check if title in the request body
+//     if (!title) {
+//         console.error('Title is required:', req.body); // Log error if title is missing
+//         return res.status(400).json({ error: 'Title is required' });
+//     }
+    
+//     //create new Movie object and save it to the database
+//     const newMovie = new Movie({title, releaseDate, genre, actors, imageUrl });
+    
+//     newMovie.save()
+//         .then(savedMovie => {
+//             console.log('Saved movie to database:', savedMovie); // Log the saved movie
+//             //send the newly saved movie with success response
+//             res.status(200).json(savedMovie);
+//         })
+// });
 
 //put /movies/:title route
 router.put('/movies/:title', authJwtController.isAuthenticated, (req, res) => {
