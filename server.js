@@ -169,7 +169,7 @@ router.get('/movies', authJwtController.isAuthenticated, (req, res) => {
         {
             $addFields: {
                 avgRating: { $avg: "$movie_reviews.rating" },
-                imageUrl: "$imageUrl" // Include the imageUrl field from the original movie document
+                imageUrl: "$$ROOT.imageUrl" // Corrected to access imageUrl from the root document
             }
         },
         {
@@ -184,6 +184,7 @@ router.get('/movies', authJwtController.isAuthenticated, (req, res) => {
         }
     });
 });
+
 
 //get /movies with specific id route and create array for reviews
 router.get('/movies/:id', authJwtController.isAuthenticated, (req, res) => {
