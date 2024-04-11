@@ -34,46 +34,15 @@ app.use(cors({
 const uri = process.env.DB;
 const port = process.env.PORT || 8080;
 
+// //connect to MongoDB database
+// mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+//   .then(() => console.log('MongoDB connected'))
+//   .catch(err => console.log(err));
+
 //connect to MongoDB database
-mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(uri)
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
-//Google tracking ID for analytics
-const GA_TRACKING_ID = process.env.GA_KEY;
-
-//Function to track Google analytics
-function trackDimension(category, action, label, value, dimension, metric) {
-
-    var options = { method: 'GET',
-        url: 'https://www.google-analytics.com/collect',
-        qs:
-            {   // API Version.
-                v: '1',
-                // Tracking ID / Property ID.
-                tid: GA_TRACKING_ID,
-                // Random Client Identifier. Ideally, this should be a UUID that
-                // is associated with particular user, device, or browser instance.
-                cid: crypto.randomBytes(16).toString("hex"),
-                // Event hit type.
-                t: 'event',
-                // Event category.
-                ec: category,
-                // Event action.
-                ea: action,
-                // Event label.
-                el: label,
-                // Event value.
-                ev: value,
-                // Custom Dimension
-                cd1: dimension,
-                // Custom Metric
-                cm1: metric
-            },
-        headers:
-            {  'Cache-Control': 'no-cache' } };
-
-    return rp(options);
-}
 
 //ROUTES
 //signup/ route
@@ -271,6 +240,26 @@ router.post('/movies', authJwtController.isAuthenticated, (req, res) => {
             res.status(200).json(savedMovie);
         });
 });
+//ADD review submission route for later
+// post route to add a review
+router.post('/movies/:movieId/reviews', authJwtController.isAuthenticated, (req, res) => {
+    const movieId = req.params.movieId;
+    const { rating, comment } = req.body;
+    const username = req.user.username; // Extract username from the authenticated user
+
+    // Create a new review object and save it to the database
+    const newReview = new Review({ movieId, username, rating, comment });
+
+    newReview.save()
+        .then(savedReview => {
+            res.status(200).json({ message: 'Review created!', review: savedReview });
+        })
+        .catch(error => {
+            console.error('Error creating review:', error);
+            res.status(500).json({ error: 'An error occurred while creating the review' });
+        });
+});
+
 // router.post('/movies', authJwtController.isAuthenticated, (req, res) => {
 
     
@@ -377,5 +366,3 @@ router.get('/reviews', authJwtController.isAuthenticated, (req, res) => {
 app.use('/', router);
 app.listen(process.env.PORT || 8080);
 module.exports = app; //for testing only
-
-
