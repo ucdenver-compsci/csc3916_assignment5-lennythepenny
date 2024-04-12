@@ -97,34 +97,6 @@ router.post('/signin', function (req, res) {
 });
 
 //MOVIE ROUTES
-// router.get('/movies', authJwtController.isAuthenticated, (req, res) => {
-//     Movie.aggregate([
-//         {
-//             $lookup: {
-//                 from: "reviews",
-//                 localField: "_id",
-//                 foreignField: "movieId",
-//                 as: "movie_reviews"
-//             }
-//         },
-//         {
-//             $addFields: {
-//                 avgRating: { $avg: "$movie_reviews.rating" },
-//                 imageUrl: "$imageUrl" // Include the imageUrl field from the original movie document
-//             }
-//         },
-//         {
-//             $sort: { avgRating: -1 } 
-//         }
-//     ]).exec((err, movies) => {
-//         if (err) {
-//             console.error('Error finding movies:', err);
-//             res.status(500).json({ error: 'An error occurred while fetching movies' });
-//         } else {
-//             res.status(200).json(movies);
-//         }
-//     });
-// });
 router.get('/movies', authJwtController.isAuthenticated, (req, res) => {
     Movie.aggregate([
         {
@@ -138,7 +110,7 @@ router.get('/movies', authJwtController.isAuthenticated, (req, res) => {
         {
             $addFields: {
                 avgRating: { $avg: "$movie_reviews.rating" },
-                imageUrl: "$$ROOT.imageUrl" // Corrected to access imageUrl from the root document
+                imageUrl: "$imageUrl" // Include the imageUrl field from the original movie document
             }
         },
         {
@@ -153,6 +125,34 @@ router.get('/movies', authJwtController.isAuthenticated, (req, res) => {
         }
     });
 });
+// router.get('/movies', authJwtController.isAuthenticated, (req, res) => {
+//     Movie.aggregate([
+//         {
+//             $lookup: {
+//                 from: "reviews",
+//                 localField: "_id",
+//                 foreignField: "movieId",
+//                 as: "movie_reviews"
+//             }
+//         },
+//         {
+//             $addFields: {
+//                 avgRating: { $avg: "$movie_reviews.rating" },
+//                 imageUrl: "$$ROOT.imageUrl" // Corrected to access imageUrl from the root document
+//             }
+//         },
+//         {
+//             $sort: { avgRating: -1 } 
+//         }
+//     ]).exec((err, movies) => {
+//         if (err) {
+//             console.error('Error finding movies:', err);
+//             res.status(500).json({ error: 'An error occurred while fetching movies' });
+//         } else {
+//             res.status(200).json(movies);
+//         }
+//     });
+// });
 
 
 //get /movies with specific id route and create array for reviews
