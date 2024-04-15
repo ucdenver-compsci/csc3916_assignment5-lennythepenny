@@ -230,9 +230,6 @@ router.get('/movies/:id', authJwtController.isAuthenticated, (req, res) => {
         }
       });
     } else {
-      // No need for separate logic here
-      // The existing logic within the `if (includeReviews)` block
-      // will handle fetching movie details when reviews are not requested.
       Movie.findById(movieId)
         .then(movie => {
           if (!movie) {
