@@ -125,35 +125,6 @@ router.get('/movies', authJwtController.isAuthenticated, (req, res) => {
         }
     });
 });
-// router.get('/movies', authJwtController.isAuthenticated, (req, res) => {
-//     Movie.aggregate([
-//         {
-//             $lookup: {
-//                 from: "reviews",
-//                 localField: "_id",
-//                 foreignField: "movieId",
-//                 as: "movie_reviews"
-//             }
-//         },
-//         {
-//             $addFields: {
-//                 avgRating: { $avg: "$movie_reviews.rating" },
-//                 imageUrl: "$$ROOT.imageUrl" // Corrected to access imageUrl from the root document
-//             }
-//         },
-//         {
-//             $sort: { avgRating: -1 } 
-//         }
-//     ]).exec((err, movies) => {
-//         if (err) {
-//             console.error('Error finding movies:', err);
-//             res.status(500).json({ error: 'An error occurred while fetching movies' });
-//         } else {
-//             res.status(200).json(movies);
-//         }
-//     });
-// });
-
 
 //get /movies with specific id route and create array for reviews
 router.get('/movies/:id', authJwtController.isAuthenticated, (req, res) => {
@@ -242,10 +213,10 @@ router.post('/movies', authJwtController.isAuthenticated, (req, res) => {
 });
 //ADD review submission route for later
 // post route to add a review
-router.post('/movies/:movieId/reviews', authJwtController.isAuthenticated, (req, res) => {
+router.post('/movies/:id/reviews', authJwtController.isAuthenticated, (req, res) => {
     const movieId = req.params.movieId;
     const { rating, comment } = req.body;
-    const username = req.user.username; // Extract username from the authenticated user
+    const username = req.user.username;
 
     // Create a new review object and save it to the database
     const newReview = new Review({ movieId, username, rating, comment });
