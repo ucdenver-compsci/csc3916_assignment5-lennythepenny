@@ -211,15 +211,15 @@ router.post('/movies', authJwtController.isAuthenticated, (req, res) => {
             res.status(200).json(savedMovie);
         });
 });
-//ADD review submission route for later
+
 // post route to add a review
 router.post('/movies/:id/reviews', authJwtController.isAuthenticated, (req, res) => {
     const movieId = req.params.movieId;
-    const { rating, comment } = req.body;
+    const { rating, review } = req.body;
     const username = req.user.username;
 
     // Create a new review object and save it to the database
-    const newReview = new Review({ movieId, username, rating, comment });
+    const newReview = new Review({ movieId, username, rating, review });
 
     newReview.save()
         .then(savedReview => {
