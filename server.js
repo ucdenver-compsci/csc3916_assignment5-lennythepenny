@@ -211,7 +211,20 @@ router.post('/movies', authJwtController.isAuthenticated, (req, res) => {
             res.status(200).json(savedMovie);
         });
 });
+//get route to get movie reviews for specific movie on movie detail page
+router.get('/movies/:id/reviews', authJwtController.isAuthenticated, (req, res) => {
+    const movieId = req.params.id;
 
+    // Find all reviews with the specified movieId
+    Review.find({ movieId })
+        .then(reviews => {
+            res.status(200).json(reviews);
+        })
+        .catch(error => {
+            console.error('Error fetching reviews:', error);
+            res.status(500).json({ error: 'An error occurred while fetching reviews' });
+        });
+});
 // post route to add a review
 router.post('/movies/:id/reviews', authJwtController.isAuthenticated, (req, res) => {
     // const movieId = req.params.movieId;
