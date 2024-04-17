@@ -243,8 +243,6 @@ router.get('/movies/:id', authJwtController.isAuthenticated, async (req, res) =>
     }
 });
 
-  
-
 //post /movies route
 router.post('/movies', authJwtController.isAuthenticated, (req, res) => {
     const {movieId, title, releaseDate, genre, actors, imageUrl} = req.body;
