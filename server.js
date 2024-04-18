@@ -121,75 +121,6 @@ router.get('/movies', authJwtController.isAuthenticated, (req, res) => {
     });
 });
 
-// //get /movies with specific id route and create array for reviews
-// router.get('/movies/:id', authJwtController.isAuthenticated, (req, res) => {
-//     const movieId = req.params.id;
-
-//     // Checking if query in URL has ?reviews=true
-//     const includeReviews = req.query.reviews === 'true';
-
-//     // Reviews are requested
-//     if (includeReviews) {
-//         // MongoDB aggregation to create movie + its reviews array
-//         Movie.aggregate([
-//             { $match: { _id: mongoose.Types.ObjectId(movieId) } },
-//             {
-//                 $lookup: {
-//                     from: "reviews",
-//                     localField: "_id",
-//                     foreignField: "movieId",
-//                     as: "movie_reviews"
-//                 }
-//             },
-//             {
-//                 $addFields: {
-//                     avgRating: { $avg: '$movie_reviews.rating' }
-//                 }
-//             }
-//         ]).exec(function (err, result) {
-//             if (err) {
-//                 return res.status(404).json({ error: 'Movie not found' });
-//             } else {
-//                 // Check if result exists
-//                 if (!result.length) {
-//                     return res.status(404).json({ error: 'Movie not found' });
-//                 }
-//                 // Check if title exists in the result
-//                 if (!result[0].title) {
-//                     return res.status(404).json({ error: 'Movie title not found' });
-//                 }
-//                 res.status(200).json(result[0]);
-//             }
-//         });
-//     } else {
-//         // Find the movie by its ID
-//         Movie.findById(movieId)
-//             .then(movie => {
-//                 if (!movie) {
-//                     return res.status(404).json({ error: 'Movie not found' });
-//                 }
-//                 // Check if title exists in the movie
-//                 if (!movie.title) {
-//                     return res.status(404).json({ error: 'Movie title not found' });
-//                 }
-//                 //ADDED THIS
-//                     const movieWithImageURL = {
-//                         _id: movie._id,
-//                         title: movie.title,
-//                         releaseDate: movie.releaseDate,
-//                         genre: movie.genre,
-//                         actors: movie.actors,
-//                         imageUrl: movie.imageUrl
-//                     };
-//                     res.status(200).json(movieWithImageURL);
-//             })
-//             .catch(error => {
-//                 console.error('Error fetching movie:', error);
-//                 res.status(404).json({ error: 'Movie not found' });
-//             });
-//     }
-// });
-
 router.get('/movies/:id', authJwtController.isAuthenticated, async (req, res) => {
     const movieId = req.params.id;
   
@@ -243,20 +174,43 @@ router.get('/movies/:id', authJwtController.isAuthenticated, async (req, res) =>
     }
 });
 
-//post /movies route
+// //post /movies route
+// router.post('/movies', authJwtController.isAuthenticated, (req, res) => {
+//     const {movieId, title, releaseDate, genre, actors, imageUrl} = req.body;
+//     //check if title in the request body
+//     if (!title) {
+//         return res.status(400).json({ error: 'Title is required' });
+//     }
+//     //create new Movie object and save it to the database
+//     const newMovie = new Movie({ movieId, title, releaseDate, genre, actors, imageUrl});
+
+//     newMovie.save()
+//         .then(savedMovie => {
+//             //send the newly saved movie with success response
+//             res.status(200).json(savedMovie);
+//         });
+// });
+
 router.post('/movies', authJwtController.isAuthenticated, (req, res) => {
-    const {movieId, title, releaseDate, genre, actors, imageUrl} = req.body;
-    //check if title in the request body
-    if (!title) {
-        return res.status(400).json({ error: 'Title is required' });
+    const { title, releaseDate, genre, actors, imageUrl } = req.body;
+
+    // Check if title and releaseDate are provided in the request body
+    if (!title || !releaseDate) {
+        return res.status(400).json({ error: 'Title and releaseDate are required' });
     }
-    //create new Movie object and save it to the database
-    const newMovie = new Movie({ movieId, title, releaseDate, genre, actors, imageUrl});
+
+    // Create a new Movie object and save it to the database
+    const newMovie = new Movie({ title, releaseDate, genre, actors, imageUrl });
 
     newMovie.save()
         .then(savedMovie => {
-            //send the newly saved movie with success response
+            // Send the newly saved movie with success response
             res.status(200).json(savedMovie);
+        })
+        .catch(error => {
+            // Handle errors
+            console.error("Error saving movie:", error);
+            res.status(500).json({ error: "Failed to save movie" });
         });
 });
 
