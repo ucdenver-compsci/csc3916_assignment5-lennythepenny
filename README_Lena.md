@@ -1,5 +1,4 @@
-# Movie API
-
+# Assignment Five
 ## Explanation
 
 The Movie API assignment is supposed to manage movies and reviews. It lets users perform various operations like signing up, signing in, adding movies, getting movie details, adding reviews, and getting reviews. The API is built using Node.js with Express.js for handling HTTP requests, MongoDB for data storage, and JWT authentication for securing routes.
@@ -23,7 +22,6 @@ This file handles user authentication using JWT tokens. It includes functions fo
 3. Set up environment variables by creating a `.env` file in the root directory with the following variables:
    - `DB`: MongoDB connection URI
    - `SECRET_KEY`: Secret key for JWT authentication
-   - `GA_KEY`: Google Analytics tracking ID
 4. MongoDB needs to be running locally or you can provide the connection URI to a MongoDB Atlas cluster.
 
 ## Postman Link
@@ -33,5 +31,4 @@ This file handles user authentication using JWT tokens. It includes functions fo
 
 - **DB**: MongoDB connection URI
 - **SECRET_KEY**: Secret key for JWT authentication
-- **GA_KEY**: Google Analytics tracking ID
 

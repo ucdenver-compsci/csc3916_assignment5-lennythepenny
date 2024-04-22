@@ -92,6 +92,7 @@ router.post('/signin', function (req, res) {
 });
 
 //MOVIE ROUTES
+//main getting movies route
 router.get('/movies', authJwtController.isAuthenticated, (req, res) => {
     Movie.aggregate([
         {
@@ -105,7 +106,7 @@ router.get('/movies', authJwtController.isAuthenticated, (req, res) => {
         {
             $addFields: {
                 avgRating: { $avg: "$movie_reviews.rating" },
-                imageUrl: "$imageUrl" // Include the imageUrl field from the original movie document
+                imageUrl: "$imageUrl" //need the image
             }
         },
         {
@@ -121,13 +122,14 @@ router.get('/movies', authJwtController.isAuthenticated, (req, res) => {
     });
 });
 
+//get route for movie details by ID
 router.get('/movies/:id', authJwtController.isAuthenticated, async (req, res) => {
     const movieId = req.params.id;
-  
+    //checking if review parameter is there
     const includeReviews = req.query.reviews === 'true';
-  
     try {
-        if (includeReviews) {
+        if (includeReviews) { //review parameter is true
+            //aggregation pipeline to fetch movie details with reviews
             const result = await Movie.aggregate([
                 { $match: { _id: mongoose.Types.ObjectId(movieId) } },
                 {
@@ -139,24 +141,28 @@ router.get('/movies/:id', authJwtController.isAuthenticated, async (req, res) =>
                     }
                 },
                 {
+                    //calculating average rating for all reviews for a movie
                     $addFields: {
                         avgRating: { $avg: '$movie_reviews.rating' }
                     }
                 }
             ]);
-
+            //no movie found or movie doesn't have title
             if (!result.length || !result[0].title) {
                 return res.status(404).json({ error: 'Movie not found' });
             }
-
+            //movie details with reviews
             res.status(200).json(result[0]);
-        } else {
+        } 
+        //reviews parameter isn't there
+        else {
+            //finding movie by ID
             const movie = await Movie.findById(movieId);
-
+            //movie isn't found and doesn't have a title
             if (!movie || !movie.title) {
                 return res.status(404).json({ error: 'Movie not found' });
             }
-
+            //needed movie data for response
             const movieWithImageURL = {
                 _id: movie._id,
                 title: movie.title,
@@ -165,7 +171,6 @@ router.get('/movies/:id', authJwtController.isAuthenticated, async (req, res) =>
                 actors: movie.actors,
                 imageUrl: movie.imageUrl
             };
-
             res.status(200).json(movieWithImageURL);
         }
     } catch (error) {
@@ -174,41 +179,23 @@ router.get('/movies/:id', authJwtController.isAuthenticated, async (req, res) =>
     }
 });
 
-// //post /movies route
-// router.post('/movies', authJwtController.isAuthenticated, (req, res) => {
-//     const {movieId, title, releaseDate, genre, actors, imageUrl} = req.body;
-//     //check if title in the request body
-//     if (!title) {
-//         return res.status(400).json({ error: 'Title is required' });
-//     }
-//     //create new Movie object and save it to the database
-//     const newMovie = new Movie({ movieId, title, releaseDate, genre, actors, imageUrl});
-
-//     newMovie.save()
-//         .then(savedMovie => {
-//             //send the newly saved movie with success response
-//             res.status(200).json(savedMovie);
-//         });
-// });
-
+//post /movies route to add movies
 router.post('/movies', authJwtController.isAuthenticated, (req, res) => {
     const { title, releaseDate, genre, actors, imageUrl } = req.body;
 
-    // Check if title and releaseDate are provided in the request body
+    //check if title and releaseDate are in the body
     if (!title || !releaseDate) {
         return res.status(400).json({ error: 'Title and releaseDate are required' });
     }
 
-    // Create a new Movie object and save it to the database
+    //create new movie object and save it to the database
     const newMovie = new Movie({ title, releaseDate, genre, actors, imageUrl });
-
+    //saving new movie to database
     newMovie.save()
         .then(savedMovie => {
-            // Send the newly saved movie with success response
             res.status(200).json(savedMovie);
         })
         .catch(error => {
-            // Handle errors
             console.error("Error saving movie:", error);
             res.status(500).json({ error: "Failed to save movie" });
         });
@@ -218,7 +205,7 @@ router.post('/movies', authJwtController.isAuthenticated, (req, res) => {
 router.get('/movies/:id/reviews', authJwtController.isAuthenticated, (req, res) => {
     const movieId = req.params.id;
 
-    // Find all reviews with the specified movieId
+    //find all reviews with specific movieId
     Review.find({ movieId })
         .then(reviews => {
             res.status(200).json(reviews);
@@ -231,12 +218,11 @@ router.get('/movies/:id/reviews', authJwtController.isAuthenticated, (req, res) 
 
 //post route to add a review
 router.post('/movies/:id/reviews', authJwtController.isAuthenticated, (req, res) => {
-    // const movieId = req.params.movieId;
     const movieId = req.params.id
     const { rating, review } = req.body;
     const username = req.user.username;
 
-    // Create a new review object and save it to the database
+    //create new review object and save it to the database
     const newReview = new Review({ movieId, username, rating, review });
 
     newReview.save()
@@ -281,24 +267,6 @@ router.delete('/movies/:title', authJwtController.isAuthenticated, (req, res) =>
         })
         .catch(error => res.status(500).json({ error: 'An error occurred while deleting the movie' }));
 });
-// //ADDED SEARCH MOVIES
-// router.post('/search', authJwtController, (req, res) => {
-//     const { query } = req.body;
-
-//     Movie.find({
-//         $or: [
-//             { title: { $regex: query, $options: 'i' } },
-//             { actors: { $regex: query, $options: 'i' } }
-//         ]
-//     }).exec((err, movies) => {
-//         if (err) {
-//             console.error('Error searching movies:', err);
-//             res.status(500).json({ error: 'An error occurred while searching movies' });
-//         } else {
-//             res.status(200).json(movies);
-//         }
-//     });
-// });
 
 //REVIEW ROUTES
 //post route to add a review

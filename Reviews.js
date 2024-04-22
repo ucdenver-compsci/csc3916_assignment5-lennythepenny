@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 
 mongoose.connect(process.env.DB);
 
-//Review schema
+//review schema
 const reviewSchema = new mongoose.Schema({
     movieId: { type: mongoose.Schema.Types.ObjectId, ref: 'Movie' },
     username: String,
@@ -12,5 +12,5 @@ const reviewSchema = new mongoose.Schema({
   });
   
 
-// return the model
+//return the model
 module.exports = mongoose.model('Review', reviewSchema);

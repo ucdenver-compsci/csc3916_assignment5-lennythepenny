@@ -3,8 +3,7 @@ mongoose.connect(process.env.DB);
 
 const MovieSchema = new mongoose.Schema({
   title: { type: String, required: true, index: true },
-    // releaseDate: { type: Number, min: [1900, 'Must be greater than 1899'], max: [2100, 'Must be less than 2100']},
-    releaseDate: { type: String, required: true }, // Change the type to String
+    releaseDate: { type: String, required: true },
     genre: {
       type: String,
       enum: [
