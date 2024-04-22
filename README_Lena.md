@@ -25,7 +25,7 @@ This file handles user authentication using JWT tokens. It includes functions fo
 4. MongoDB needs to be running locally or you can provide the connection URI to a MongoDB Atlas cluster.
 
 ## Postman Link
-[<img src="https://run.pstmn.io/button.svg" alt="Run In Postman" style="width: 128px; height: 32px;">](https://app.getpostman.com/run-collection/32529359-3ebe3288-963c-4459-9c5e-3cab72b40bd6?action=collection%2Ffork&source=rip_markdown&collection-url=entityId%3D32529359-3ebe3288-963c-4459-9c5e-3cab72b40bd6%26entityType%3Dcollection%26workspaceId%3Dca5832e0-b516-4424-a865-0681292703ce)
+[<img src="https://run.pstmn.io/button.svg" alt="Run In Postman" style="width: 128px; height: 32px;">](https://app.getpostman.com/run-collection/32529359-15d1719f-baa5-40d6-8fe3-22804015b38f?action=collection%2Ffork&source=rip_markdown&collection-url=entityId%3D32529359-15d1719f-baa5-40d6-8fe3-22804015b38f%26entityType%3Dcollection%26workspaceId%3Dca5832e0-b516-4424-a865-0681292703ce)
 
 ## Environment Settings
 
